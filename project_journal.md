@@ -37,3 +37,23 @@
 - To begin implementing this approach, M implemented the initial plan and worked alongside O and T to create a new EC2 instance that will host the NGINX proxy. NGINX was successfully installed and we verified that it was running by accessing the default NGINX homepage through the browser. T then looked into how NGINX could be configured to correctly forward requests to the backend server and support the potential caching strategy.
 
 - In addition, more monitoring data was added to the CloudWatch dashboard to give the team better visibility of request patterns, response times and errors. The start of the implementation plan was also documented on Trello so the team could review and contribute to the approach.
+
+## Day 4
+
+- Today we focused on improving the reliability of our service by introducing Nginx as a reverse proxy in front of our backend API. As a team, we divided the investigation across several areas of Nginx behaviour to understand how different features could improve resilience when the backend service returned errors, specifically 500 error codes returned by the backend service.
+
+- O researched buffering and retry mechanisms within Nginx to understand how requests could be handled more efficiently when the backend returned error responses. T explored how retry logic works within Nginx and how it could potentially reduce the impact of backend errors on the client.
+
+- N investigated Nginx caching, focusing on whether caching responses from certain endpoints could reduce repeated requests to the backend service and therefore reduce load.
+
+- M implemented the initial Nginx configuration, setting up a reverse proxy to forward requests to the backend API. After this baseline configuration was deployed, we enabled retry logic so that Nginx could retry requests under defined conditions.
+
+- Once retries were configured, we began observing traffic through the system and analysing behaviour using logs and metrics.
+
+- To improve resilience and remove the single point of failure, we introduced a second Nginx instance and an additional target group, allowing the load balancer to distribute traffic between the two proxies.
+
+- We then implemented buffering to better manage responses from the upstream backend service. After introducing buffering, we observed an increase in the overall success rate of requests.
+
+- Finally, we added caching to the bravo-nginx instance to reduce repeated requests for specific endpoints. As a team, we agreed to implement the same caching configuration tomorrow on bravo-nginx2 to ensure consistent behaviour across both proxy instances.
+
+- Overall, today’s work focused on testing how different Nginx features — retries, buffering, caching, and scaling the proxy layer — could improve reliability when the backend service returns error responses.

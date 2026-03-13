@@ -18,3 +18,29 @@
 | `ProcessedBytes` | The amount of data processed by the load balancer. | Reflects the volume of data transferred through the system. | Helps detect heavy workloads such as image uploads or large data transfers that may affect performance. |
 
 | `UnhealthyRoutingRequests` | Requests routed to targets that were marked unhealthy. | Indicates traffic reaching failing or unstable backend instances. | Suggests health checks may not be working properly or the backend service is unstable. |
+
+## Documentation
+
+- https://docs.aws.amazon.com/elasticloadbalancing/latest/application/load-balancer-access-logs.html#:~:text=UndefinedContentLengthSemantics
+
+- https://contabo.com/blog/http-response-codes-server-statuses/?utm_source=google&utm_medium=cpc&utm_campaign=&utm_term=&utm_content=&gad_source=1&gad_campaignid=23627497612&gbraid=0AAAAAD_Qy-fw89n6ecHRUnoWX2FOKXUC0&gclid=Cj0KCQjwgr_NBhDFARIsAHiUWr5OD1shRtao_3RVrb2KCJbj7QUcZcnQZtryJiuH4C8iV_sUECFJZIAaAkpgEALw_wcB
+
+- https://oneuptime.com/blog/post/2026-02-12-create-cloudwatch-alarms-terraform/view#:~:text=A%20practical%20guide%20to%20creating,composite%20alarms%2C%20and%20SNS%20notifications
+
+- https://docs.aws.amazon.com/elasticloadbalancing/latest/application/load-balancer-troubleshooting.html#http-500-issues
+
+- https://docs.nginx.com/nginx/admin-guide/content-cache/content-caching/
+
+- https://docs.nginx.com/nginx/deployment-guides/amazon-web-services/high-availability-network-load-balancer/
+
+- https://oneuptime.com/blog/post/2026-01-25-nginx-request-buffering/view
+
+- https://www.digitalocean.com/community/tutorials/understanding-nginx-http-proxying-load-balancing-buffering-and-caching
+
+- https://docs.aws.amazon.com/athena/latest/ug/query-alb-access-logs-examples.html
+
+- https://serverfault.com/questions/528653/how-can-i-stop-nginx-from-retrying-put-or-post-requests-on-upstream-server-timeo
+
+## Miro Board - Threat Diagram
+
+- https://miro.com/app/board/uXjVG0xYs0w=/
