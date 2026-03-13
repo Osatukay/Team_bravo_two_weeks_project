@@ -57,3 +57,39 @@
 - Finally, we added caching to the bravo-nginx instance to reduce repeated requests for specific endpoints. As a team, we agreed to implement the same caching configuration tomorrow on bravo-nginx2 to ensure consistent behaviour across both proxy instances.
 
 - Overall, today’s work focused on testing how different Nginx features — retries, buffering, caching, and scaling the proxy layer — could improve reliability when the backend service returns error responses.
+
+## Day 5
+
+- Overnight, our service reached a 99% success rate, showing a clear improvement in reliability compared with the previous day.
+
+- T added caching to nginx_bravo2, bringing it in line with the caching work already completed on the first Nginx instance. We then added queueing/rate-limiting controls to both instances and continued monitoring logs and traffic behaviour. During this monitoring, we noticed an increase in traffic levels.
+
+- To help Nginx manage the higher traffic, we adjusted the rate-limiting settings by increasing the burst value from 10 to 20, while reducing the request rate from 5 requests per second to 2 requests per second.
+
+- We also added additional caching blocks for /notes, /patients, and /staffs, as these endpoints were still appearing in the logs with 500 backend errors.
+
+- While reviewing the logs, we found some 502 errors on nginx_bravo. To address this, we copied the working configuration from nginx_bravo2 to nginx_bravo, ensuring both proxy instances were using the same setup.
+
+- We then increased the connection timeout values to the backend across each relevant block in the configuration, including /patients, /staffs, /hospitals, and /notes, to make the proxy layer more tolerant of slower backend responses.
+
+- We also updated the retry configuration to include:
+
+proxy_next_upstream error timeout http_500 http_502 http_503 http_504 non_idempotent;
+
+- This allowed Nginx to retry a wider range of failing requests, including non-idempotent requests, during backend instability.
+
+- As a final improvement, we updated the upstream server definition to:
+
+server 172.31.33.74:80 max_fails=0;
+
+- This ensured the backend server would not be temporarily marked as unavailable when intermittent failures occurred.
+
+- We also increased the Nginx buffering configuration across all relevant blocks on both proxy instances to better handle larger upstream responses:
+
+proxy_buffer_size 16k;
+proxy_buffers 8 64k;
+proxy_busy_buffers_size 128k;
+
+- Following these final adjustments, the system achieved 99.92% success and reliability, demonstrating a significant improvement in stability under load.
+
+- Overall, Day 5 focused on standardising configurations across both Nginx instances, expanding caching for high-traffic endpoints, tuning rate limiting, increasing backend timeouts, improving buffering behaviour, and refining retry logic, all of which contributed to a highly reliable service.

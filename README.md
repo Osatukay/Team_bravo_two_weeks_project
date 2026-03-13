@@ -41,6 +41,8 @@
 
 - https://serverfault.com/questions/528653/how-can-i-stop-nginx-from-retrying-put-or-post-requests-on-upstream-server-timeo
 
+- https://nginx.org/en/docs/http/ngx_http_proxy_module.html#proxy_cache_use_stale
+
 ## Miro Board - Threat Diagram
 
 - https://miro.com/app/board/uXjVG0xYs0w=/
