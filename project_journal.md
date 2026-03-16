@@ -93,3 +93,22 @@ proxy_busy_buffers_size 128k;
 - Following these final adjustments, the system achieved 99.92% success and reliability, demonstrating a significant improvement in stability under load.
 
 - Overall, Day 5 focused on standardising configurations across both Nginx instances, expanding caching for high-traffic endpoints, tuning rate limiting, increasing backend timeouts, improving buffering behaviour, and refining retry logic, all of which contributed to a highly reliable service.
+
+## Day 6
+
+ - Today the team focused on improving security and introducing serverless processing for the image screening workflow.
+
+- M and T implemented HTTPS for the Nginx service. They generated a certificate and configured it within the Nginx configuration file, including the associated private key and password protection. The certificate and key were then imported into **AWS Certificate Manager (ACM)**. After this, a new HTTPS listener was configured on port **443** for the Application Load Balancer, and the security group rules for the Nginx instances were updated to allow inbound traffic on port 443.
+
+- N created a **Lambda function** to handle the image screening workflow. The Lambda function first calls **POST `/patients/:patient_id/screen`** to perform the image screening and retrieve the results. It then calls **GET `/staffs/me`** to obtain the authenticated `staff_id`. Finally, it creates a note using **POST `/notes`**, storing the screening outcome against the patient record.
+
+- The Lambda function is triggered through the **Application Load Balancer** using a listener rule, meaning that requests to **`/patients/:patient_id/screen`** are routed to the Lambda function first before interacting with the backend service.
+
+- After implementing the function, the team tested the Lambda code to ensure the workflow executed correctly.
+
+- N and O then created a **Lambda target group** and attached it to the ALB listener rule with the condition **`/patients/*/screen`**, ensuring that screening requests are correctly routed to the Lambda function.
+
+- Towards the end of the day the team also started setting up **Terraform** for the infrastructure by adding the relevant configuration files. The aim is to begin defining the AWS resources we’ve been using as infrastructure-as-code so the environment can be recreated more easily and managed in a more consistent way.
+
+
+- Current system testing shows a **99.95% success rate** for the workflow.
